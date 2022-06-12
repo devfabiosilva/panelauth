@@ -1,7 +1,7 @@
 #include <Python.h>
 #include <cauth2.h>
 
-_Static_assert(
+/*_Static_assert(
    sizeof(mbedtls_md_type_t)==sizeof(int),
    "Error. Realign for int"
 );
@@ -23,6 +23,26 @@ struct panelAuthConst_t {
    {"ALG_SHA1_DEFAULT", MBEDTLS_MD_SHA1},
    {"ALG_SHA256", MBEDTLS_MD_SHA256},
    {"ALG_SHA512", MBEDTLS_MD_SHA512},
+   {NULL}
+};*/
+
+typedef struct {
+   PyObject_HEAD
+   const char *hmac_secret_key_dyn;
+   size_t hmac_secret_key_size;
+   int hmac_alg_type;
+   const char *totp_secret_key_dyn;
+   size_t totp_secret_key_size;
+   int totp_alg_type;
+} C_RAW_DATA_OBJ;
+
+struct panelAuthConst_t {
+   const char *name;
+   int value;
+} PANEL_AUTH_CONST[] = {
+   {"ALG_SHA1_DEFAULT", ALG_SHA1_DEFAULT},
+   {"ALG_SHA256", ALG_SHA256},
+   {"ALG_SHA512", ALG_SHA512},
    {NULL}
 };
 
@@ -97,8 +117,8 @@ static int c_raw_data_obj_init(C_RAW_DATA_OBJ *self, PyObject *args, PyObject *k
 
    self->hmac_secret_key_dyn=NULL;
    self->totp_secret_key_dyn=NULL;
-   self->hmac_alg_type=MBEDTLS_MD_SHA256;
-   self->totp_alg_type=MBEDTLS_MD_SHA1;
+   self->hmac_alg_type=ALG_SHA256 /*MBEDTLS_MD_SHA256*/;
+   self->totp_alg_type=ALG_SHA1_DEFAULT /* MBEDTLS_MD_SHA1 */;
 
    if (!PyArg_ParseTupleAndKeywords(
       args, kwds, "s|sII", kwlist,

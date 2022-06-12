@@ -4,12 +4,15 @@
 
 #include <time.h>
 #include <stdint.h>
-#include <mbedtls/md.h>
 #include <string.h>
 #include <stdlib.h>
 
 #define TRUE (int)(1==1)
 #define FALSE (int)(1!=1)
+
+#define ALG_SHA1_DEFAULT (int)2
+#define ALG_SHA256 (int)4
+#define ALG_SHA512 (int)6
 
 typedef int CAUTH_BOOL;
 
@@ -45,7 +48,7 @@ typedef enum cauth_verify_err_t {
 CAUTH_2FA_AUTH_CODE_ERR
 cauth_2fa_auth_code(
    uint32_t *,
-   mbedtls_md_type_t,
+   int,
    uint8_t *,
    size_t,
    int,
@@ -58,7 +61,7 @@ cauth_2fa_auth_code(
 CAUTH_SIGN_CODE_ERR
 sign_message_dynamic(
    void **, size_t *,
-   mbedtls_md_type_t,
+   int,
    uint8_t *, size_t,
    uint8_t *, size_t
 );
@@ -73,7 +76,7 @@ cauth_str_to_hex(
 CAUTH_VERIFY_CODE_ERR
 cauth_verify_message_with_err(
    uint8_t *, size_t,
-   mbedtls_md_type_t,
+   int,
    uint8_t *, size_t,
    uint8_t *, size_t
 );
@@ -81,7 +84,7 @@ cauth_verify_message_with_err(
 CAUTH_BOOL
 cauth_verify_message(
    uint8_t *, size_t,
-   mbedtls_md_type_t,
+   int,
    uint8_t *, size_t,
    uint8_t *, size_t
 );
@@ -102,6 +105,15 @@ CAUTH_2FA_AUTH_CODE_ERR
 check_base32_oauth_key_valid(
    size_t *,
    const char *, size_t,
-   mbedtls_md_type_t
+   int
 );
+
+const char *
+cauth_getVersion();
+
+const char *
+cauth_buildDate();
+
+const char *
+cauth_endianess();
 #endif

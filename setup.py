@@ -9,9 +9,9 @@ def main():
         maintainer_email="fabioegel@gmail.com",
         ext_modules=[Extension("panelauth", ["module.c"],
             library_dirs=['lib'],
-            libraries=['mbedtls'],
-            extra_objects=['cauth.o', 'cyodecode.o'],
-            include_dirs=['include', 'include/mbedtls', 'include/cyoencode'],
+            libraries=['cauth2_shared'],
+            #extra_objects=['cauth.o', 'cyodecode.o'],
+            include_dirs=['include'],
             define_macros=[('P_DEBUG', None)]
         )])
 
